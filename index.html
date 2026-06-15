@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0a0b">
+<title>Hellfest 2026 — Ma timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0a0b; --surface:#171315; --surface2:#211b1e; --line:#2c2529;
+  --text:#efe9e4; --muted:#9b918b; --ember:#ff5a1f; --ember2:#ff8a3d; --warn:#ff453a;
+  --ms1:#e23b2e; --ms2:#f0892a; --wz:#d8c13a; --vl:#3fae6e; --tp:#5b8def; --al:#a86bd1;
+  --disp:'Oswald',system-ui,sans-serif; --body:'Inter',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;-webkit-font-smoothing:antialiased}
+body{max-width:560px;margin:0 auto;padding-bottom:40px}
+.app{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#0c0a0b 78%,rgba(12,10,11,.0));backdrop-filter:blur(6px);padding:12px 14px 8px;border-bottom:1px solid var(--line)}
+.brand{font-family:var(--disp);text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:var(--ember2);font-weight:600}
+.days{display:flex;gap:7px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.day{flex:none;font-family:var(--disp);text-transform:uppercase;letter-spacing:.04em;font-weight:600;font-size:14px;background:var(--surface);border:1px solid var(--line);color:var(--muted);padding:9px 15px;border-radius:999px;cursor:pointer;position:relative}
+.day.on{background:linear-gradient(180deg,var(--ember),#d8430f);border-color:transparent;color:#fff}
+.day.today::after{content:"";position:absolute;top:5px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--ember2)}
+.day.on.today::after{background:#fff}
+.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;margin-top:8px;gap:4px}
+.seg button{flex:1;font-family:var(--body);font-weight:600;font-size:14px;color:var(--muted);background:none;border:none;padding:10px 8px;border-radius:9px;cursor:pointer}
+.seg button.on{background:var(--surface2);color:var(--text)}
+.view{padding:14px}
+
+/* now/next */
+.live{border:1px solid rgba(255,90,31,.45);background:linear-gradient(180deg,rgba(255,90,31,.14),rgba(255,90,31,.04));border-radius:14px;padding:13px 14px;margin-bottom:14px}
+.live .row{display:flex;align-items:baseline;gap:8px}
+.live .tag{font-family:var(--disp);text-transform:uppercase;letter-spacing:.06em;font-size:11px;font-weight:600;color:var(--ember2)}
+.live .band{font-weight:700;font-size:17px;margin:2px 0 0}
+.live .meta{color:var(--muted);font-size:13px;margin-top:1px}
+.live .next{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)}
+
+/* timeline verticale */
+.cflabel{color:#ff8077;font-size:13px;font-weight:600;margin:2px 0 6px}
+.hint2{color:var(--muted);font-size:12px;margin:0 0 10px}
+.tl{position:relative;margin-top:4px}
+.gl{position:absolute;left:42px;right:0;border-top:1px solid rgba(255,255,255,.05)}
+.hlbl{position:absolute;left:0;width:38px;font-size:11px;color:var(--muted);transform:translateY(-7px);font-variant-numeric:tabular-nums;text-align:right}
+.track{position:absolute;left:46px;right:0;top:0;border-left:1px solid var(--line)}
+.block{position:absolute;border-radius:10px;padding:6px 9px;overflow:hidden;color:#0c0a0b;box-shadow:0 1px 3px rgba(0,0,0,.35);cursor:pointer}
+.block .bn{font-weight:700;font-size:13px;line-height:1.12;overflow:hidden}
+.block .bt{font-size:11px;font-weight:600;opacity:.82;font-variant-numeric:tabular-nums;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.block.cf{outline:2px solid var(--warn);outline-offset:-2px;box-shadow:0 0 0 3px rgba(255,69,58,.22),0 1px 3px rgba(0,0,0,.35)}
+.block .wb{position:absolute;top:3px;right:5px;font-size:11px;color:#7a0a04;font-weight:700}
+.nowline{position:absolute;left:0;right:0;border-top:2px solid var(--warn);z-index:6}
+.nowline::before{content:"";position:absolute;left:-5px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--warn)}
+.nowline .nl{position:absolute;right:4px;top:-15px;font-size:10px;color:var(--warn);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.empty{text-align:center;color:var(--muted);padding:34px 16px;font-size:15px;line-height:1.5}
+.empty button{margin-top:14px;font-family:var(--disp);text-transform:uppercase;letter-spacing:.05em;font-weight:600;background:linear-gradient(180deg,var(--ember),#d8430f);color:#fff;border:none;padding:12px 18px;border-radius:11px;font-size:14px;cursor:pointer}
+
+/* picker (all) */
+.search{width:100%;background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:12px 13px;font-size:15px;font-family:var(--body);margin-bottom:6px}
+.search::placeholder{color:#6f6660}
+.hint{color:var(--muted);font-size:12px;margin:2px 2px 10px}
+.prow{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 12px;margin-bottom:8px;cursor:pointer}
+.prow.sel{border-color:var(--ember);background:linear-gradient(180deg,rgba(255,90,31,.12),rgba(255,90,31,.03))}
+.prow .chk{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid #5a4c52;display:flex;align-items:center;justify-content:center;font-size:14px;color:transparent}
+.prow.sel .chk{background:var(--ember);border-color:var(--ember);color:#fff}
+.prow .pb{flex:1;min-width:0}
+.prow .pn{font-weight:600;font-size:15px;line-height:1.2}
+.prow .pm{color:var(--muted);font-size:12.5px;margin-top:2px;display:flex;align-items:center;gap:6px}
+.prow .sdot{width:8px;height:8px;border-radius:3px;flex:none}
+.daysep{font-family:var(--disp);text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--muted);margin:14px 2px 8px}
+
+.foot{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.foot .cnt{color:var(--muted);font-size:13px}
+.pdfbtn{font-family:var(--disp);text-transform:uppercase;letter-spacing:.05em;font-weight:600;font-size:13px;background:var(--surface);border:1px solid var(--line);color:var(--text);padding:11px 15px;border-radius:11px;cursor:pointer}
+.tip{color:#6f6660;font-size:11.5px;text-align:center;line-height:1.6;padding:18px 8px 0}
+
+#printout{display:none}
+@media print{
+  @page{margin:12mm}
+  .app,.view .picker,.foot,.tip{display:none!important}
+  body,.view{all:unset}
+  html,body{background:#fff!important;color:#141414;font-family:var(--body)}
+  .view{display:none}
+  #printout{display:block;padding:0;font-family:var(--body)}
+  .p-title{font-family:var(--disp);text-transform:uppercase;font-size:22px;font-weight:700}
+  .p-sub{color:#666;font-size:11px;margin:2px 0 12px}
+  .p-day{font-family:var(--disp);text-transform:uppercase;font-size:14px;font-weight:700;margin:14px 0 5px;color:#c4361a;border-bottom:2px solid #c4361a;padding-bottom:2px}
+  .p-warn{color:#c4361a;font-size:11px;margin:3px 0;font-weight:600}
+  .p-table{width:100%;border-collapse:collapse;font-size:12px}
+  .p-table th{text-align:left;color:#999;font-weight:600;font-size:10px;text-transform:uppercase;border-bottom:1px solid #ccc;padding:4px 6px}
+  .p-table td{padding:5px 6px;border-bottom:1px solid #eee}
+  .p-table tr{break-inside:avoid}.p-row-c .p-band{color:#c4361a}
+  .p-time{font-variant-numeric:tabular-nums;white-space:nowrap;color:#444}.p-band{font-weight:600}
+  .p-c{color:#c4361a;width:16px;text-align:center;font-weight:700}
+}
+</style></head>
+<body>
+<header class="app">
+  <div class="brand">Hellfest 2026 · Ma timeline</div>
+  <div class="days" id="days"></div>
+  <div class="seg" id="seg"><button data-m="prog" class="on">Ma timeline</button><button data-m="all">Tous les groupes</button></div>
+</header>
+<main class="view" id="view"></main>
+<div id="printout"></div>
+<p class="tip">Tes choix sont mémorisés sur ce téléphone. Pendant le festival, l'encart « En ce moment » se cale sur l'heure réelle.</p>
+<script>
+const DATA = [{"j": "Jeu 18", "s": "Mainstage 1", "d": "16:00", "f": "16:40", "g": "We Came As Romans"}, {"j": "Jeu 18", "s": "Valley", "d": "16:00", "f": "16:40", "g": "Truckfighters"}, {"j": "Jeu 18", "s": "Altar", "d": "16:00", "f": "16:40", "g": "Skaphos"}, {"j": "Jeu 18", "s": "Mainstage 2", "d": "16:45", "f": "17:25", "g": "Mikkey Dee With Friends"}, {"j": "Jeu 18", "s": "Warzone", "d": "16:45", "f": "17:25", "g": "Satanic Surfers"}, {"j": "Jeu 18", "s": "Temple", "d": "16:45", "f": "17:25", "g": "Perchta"}, {"j": "Jeu 18", "s": "Mainstage 1", "d": "17:30", "f": "18:10", "g": "The Plot In You"}, {"j": "Jeu 18", "s": "Valley", "d": "17:30", "f": "18:10", "g": "Elder"}, {"j": "Jeu 18", "s": "Altar", "d": "17:30", "f": "18:10", "g": "Devangelic"}, {"j": "Jeu 18", "s": "Mainstage 2", "d": "18:15", "f": "19:00", "g": "The Pretty Reckless"}, {"j": "Jeu 18", "s": "Warzone", "d": "18:15", "f": "19:00", "g": "Shelter"}, {"j": "Jeu 18", "s": "Temple", "d": "18:15", "f": "19:00", "g": "Winterfylleth"}, {"j": "Jeu 18", "s": "Mainstage 1", "d": "19:05", "f": "19:55", "g": "Breaking Benjamin"}, {"j": "Jeu 18", "s": "Valley", "d": "19:05", "f": "19:55", "g": "The Inspector Cluzo"}, {"j": "Jeu 18", "s": "Altar", "d": "19:05", "f": "19:55", "g": "Rivers Of Nihil"}, {"j": "Jeu 18", "s": "Mainstage 2", "d": "20:00", "f": "21:15", "g": "Deep Purple"}, {"j": "Jeu 18", "s": "Warzone", "d": "20:00", "f": "21:00", "g": "Lagwagon"}, {"j": "Jeu 18", "s": "Temple", "d": "20:00", "f": "21:00", "g": "Borknagar"}, {"j": "Jeu 18", "s": "Valley", "d": "21:05", "f": "22:05", "g": "Uncle Acid And The Deadbeats"}, {"j": "Jeu 18", "s": "Altar", "d": "21:05", "f": "22:05", "g": "The Halo Effect"}, {"j": "Jeu 18", "s": "Mainstage 1", "d": "21:20", "f": "22:25", "g": "Papa Roach"}, {"j": "Jeu 18", "s": "Warzone", "d": "22:10", "f": "23:10", "g": "All Time Low"}, {"j": "Jeu 18", "s": "Temple", "d": "22:10", "f": "23:10", "g": "Skáld"}, {"j": "Jeu 18", "s": "Mainstage 2", "d": "22:30", "f": "23:30", "g": "Alice Cooper"}, {"j": "Jeu 18", "s": "Valley", "d": "23:15", "f": "00:25", "g": "Kadavar"}, {"j": "Jeu 18", "s": "Altar", "d": "23:15", "f": "00:25", "g": "Igorrr"}, {"j": "Jeu 18", "s": "Mainstage 1", "d": "23:35", "f": "00:50", "g": "Bring Me The Horizon"}, {"j": "Jeu 18", "s": "Warzone", "d": "00:30", "f": "01:30", "g": "Social Distortion"}, {"j": "Jeu 18", "s": "Temple", "d": "00:30", "f": "01:30", "g": "Feuerschwanz"}, {"j": "Jeu 18", "s": "Mainstage 2", "d": "00:55", "f": "01:45", "g": "Alestorm"}, {"j": "Ven 19", "s": "Mainstage 2", "d": "10:30", "f": "11:00", "g": "Uravena"}, {"j": "Ven 19", "s": "Valley", "d": "10:30", "f": "11:00", "g": "Dragunov"}, {"j": "Ven 19", "s": "Altar", "d": "10:30", "f": "11:00", "g": "Impureza"}, {"j": "Ven 19", "s": "Mainstage 1", "d": "11:05", "f": "11:35", "g": "BlackRain"}, {"j": "Ven 19", "s": "Warzone", "d": "11:05", "f": "11:35", "g": "Wake The Dead"}, {"j": "Ven 19", "s": "Temple", "d": "11:05", "f": "11:35", "g": "Mourir"}, {"j": "Ven 19", "s": "Mainstage 2", "d": "11:40", "f": "12:10", "g": "Return To Dust"}, {"j": "Ven 19", "s": "Valley", "d": "11:40", "f": "12:10", "g": "Yarostan"}, {"j": "Ven 19", "s": "Altar", "d": "11:40", "f": "12:10", "g": "Esodic"}, {"j": "Ven 19", "s": "Mainstage 1", "d": "12:15", "f": "12:45", "g": "Wings Of Steel"}, {"j": "Ven 19", "s": "Warzone", "d": "12:15", "f": "12:45", "g": "GridIron"}, {"j": "Ven 19", "s": "Temple", "d": "12:15", "f": "12:45", "g": "Killus"}, {"j": "Ven 19", "s": "Mainstage 2", "d": "12:50", "f": "13:30", "g": "Brothers Of Metal"}, {"j": "Ven 19", "s": "Valley", "d": "12:50", "f": "13:30", "g": "Rezn"}, {"j": "Ven 19", "s": "Altar", "d": "12:50", "f": "13:30", "g": "Crypta"}, {"j": "Ven 19", "s": "Mainstage 1", "d": "13:35", "f": "14:15", "g": "Sortilège"}, {"j": "Ven 19", "s": "Warzone", "d": "13:35", "f": "14:15", "g": "Die Spitz"}, {"j": "Ven 19", "s": "Temple", "d": "13:35", "f": "14:15", "g": "Ponte Del Diavolo"}, {"j": "Ven 19", "s": "Mainstage 2", "d": "14:20", "f": "15:00", "g": "Tesseract"}, {"j": "Ven 19", "s": "Valley", "d": "14:20", "f": "15:00", "g": "Conjurer"}, {"j": "Ven 19", "s": "Altar", "d": "14:20", "f": "15:00", "g": "Blood Red Throne"}, {"j": "Ven 19", "s": "Mainstage 1", "d": "15:05", "f": "15:50", "g": "Queensrÿche"}, {"j": "Ven 19", "s": "Warzone", "d": "15:05", "f": "15:50", "g": "Point Mort"}, {"j": "Ven 19", "s": "Temple", "d": "15:05", "f": "15:50", "g": "Einherjer"}, {"j": "Ven 19", "s": "Mainstage 2", "d": "15:55", "f": "16:40", "g": "Bloodywood"}, {"j": "Ven 19", "s": "Valley", "d": "15:55", "f": "16:40", "g": "Stoned Jesus"}, {"j": "Ven 19", "s": "Altar", "d": "15:55", "f": "16:40", "g": "Sinsaenum"}, {"j": "Ven 19", "s": "Mainstage 1", "d": "16:45", "f": "17:35", "g": "Accept"}, {"j": "Ven 19", "s": "Warzone", "d": "16:45", "f": "17:35", "g": "Dying Wish"}, {"j": "Ven 19", "s": "Temple", "d": "16:45", "f": "17:35", "g": "MØL"}, {"j": "Ven 19", "s": "Mainstage 2", "d": "17:40", "f": "18:30", "g": "Sepultura"}, {"j": "Ven 19", "s": "Valley", "d": "17:40", "f": "18:30", "g": "Torche"}, {"j": "Ven 19", "s": "Altar", "d": "17:40", "f": "18:30", "g": "Sylosis"}, {"j": "Ven 19", "s": "Mainstage 1", "d": "18:35", "f": "19:55", "g": "Helloween"}, {"j": "Ven 19", "s": "Warzone", "d": "18:35", "f": "19:25", "g": "Ceremony"}, {"j": "Ven 19", "s": "Temple", "d": "18:35", "f": "19:25", "g": "Carach Angren"}, {"j": "Ven 19", "s": "Valley", "d": "19:30", "f": "20:30", "g": "Loathe"}, {"j": "Ven 19", "s": "Altar", "d": "19:30", "f": "20:30", "g": "Decapitated"}, {"j": "Ven 19", "s": "Mainstage 2", "d": "20:00", "f": "20:55", "g": "Opeth"}, {"j": "Ven 19", "s": "Warzone", "d": "20:35", "f": "21:35", "g": "Malevolence"}, {"j": "Ven 19", "s": "Temple", "d": "20:35", "f": "21:35", "g": "Rotting Christ"}, {"j": "Ven 19", "s": "Mainstage 1", "d": "21:00", "f": "23:10", "g": "Iron Maiden"}, {"j": "Ven 19", "s": "Valley", "d": "21:40", "f": "22:40", "g": "Slift"}, {"j": "Ven 19", "s": "Altar", "d": "21:40", "f": "22:40", "g": "Periphery"}, {"j": "Ven 19", "s": "Warzone", "d": "22:45", "f": "23:45", "g": "La Dispute"}, {"j": "Ven 19", "s": "Temple", "d": "22:45", "f": "23:45", "g": "My Dying Bride"}, {"j": "Ven 19", "s": "Mainstage 2", "d": "23:15", "f": "00:45", "g": "Sabaton"}, {"j": "Ven 19", "s": "Valley", "d": "23:50", "f": "00:50", "g": "Mastodon"}, {"j": "Ven 19", "s": "Altar", "d": "23:50", "f": "00:50", "g": "Blood Incantation"}, {"j": "Ven 19", "s": "Mainstage 1", "d": "00:50", "f": "02:00", "g": "Ultra Vomit"}, {"j": "Ven 19", "s": "Warzone", "d": "00:55", "f": "02:00", "g": "The Dillinger Escape Plan"}, {"j": "Ven 19", "s": "Temple", "d": "00:55", "f": "02:00", "g": "The Gathering"}, {"j": "Sam 20", "s": "Mainstage 2", "d": "10:30", "f": "11:00", "g": "Locomuerte"}, {"j": "Sam 20", "s": "Valley", "d": "10:30", "f": "11:00", "g": "Cold Capsule"}, {"j": "Sam 20", "s": "Altar", "d": "10:30", "f": "11:00", "g": "DVRK"}, {"j": "Sam 20", "s": "Mainstage 1", "d": "11:05", "f": "11:35", "g": "Slay Squad"}, {"j": "Sam 20", "s": "Warzone", "d": "11:05", "f": "11:35", "g": "False Reality"}, {"j": "Sam 20", "s": "Temple", "d": "11:05", "f": "11:35", "g": "Vígljós"}, {"j": "Sam 20", "s": "Mainstage 2", "d": "11:40", "f": "12:20", "g": "Insanity Alert"}, {"j": "Sam 20", "s": "Valley", "d": "11:40", "f": "12:20", "g": "Bruit ≤"}, {"j": "Sam 20", "s": "Altar", "d": "11:40", "f": "12:20", "g": "Profanation"}, {"j": "Sam 20", "s": "Mainstage 1", "d": "12:25", "f": "13:05", "g": "Thornhill"}, {"j": "Sam 20", "s": "Warzone", "d": "12:25", "f": "13:05", "g": "Combust"}, {"j": "Sam 20", "s": "Temple", "d": "12:25", "f": "13:05", "g": "Hulder"}, {"j": "Sam 20", "s": "Mainstage 2", "d": "13:10", "f": "13:50", "g": "Escuela Grind"}, {"j": "Sam 20", "s": "Valley", "d": "13:10", "f": "13:50", "g": "Fange"}, {"j": "Sam 20", "s": "Altar", "d": "13:10", "f": "13:50", "g": "Cabal"}, {"j": "Sam 20", "s": "Mainstage 1", "d": "13:55", "f": "14:35", "g": "House Of Protection"}, {"j": "Sam 20", "s": "Warzone", "d": "13:55", "f": "14:35", "g": "King 810"}, {"j": "Sam 20", "s": "Temple", "d": "13:55", "f": "14:35", "g": "Non Est Deus"}, {"j": "Sam 20", "s": "Mainstage 2", "d": "14:40", "f": "15:20", "g": "Gatecreeper"}, {"j": "Sam 20", "s": "Valley", "d": "14:40", "f": "15:20", "g": "Psychonaut"}, {"j": "Sam 20", "s": "Altar", "d": "14:40", "f": "15:20", "g": "Defeated Sanity"}, {"j": "Sam 20", "s": "Mainstage 1", "d": "15:25", "f": "16:05", "g": "Sidilarsen"}, {"j": "Sam 20", "s": "Warzone", "d": "15:25", "f": "16:05", "g": "Cancer Bats"}, {"j": "Sam 20", "s": "Temple", "d": "15:25", "f": "16:05", "g": "1914"}, {"j": "Sam 20", "s": "Mainstage 2", "d": "16:10", "f": "16:50", "g": "Crisix"}, {"j": "Sam 20", "s": "Valley", "d": "16:10", "f": "16:50", "g": "Pigs Pigs Pigs Pigs Pigs Pigs Pigs"}, {"j": "Sam 20", "s": "Altar", "d": "16:10", "f": "16:50", "g": "Severe Torture"}, {"j": "Sam 20", "s": "Mainstage 1", "d": "16:55", "f": "17:40", "g": "Enhancer"}, {"j": "Sam 20", "s": "Warzone", "d": "16:55", "f": "17:40", "g": "Trash Talk"}, {"j": "Sam 20", "s": "Temple", "d": "16:55", "f": "17:40", "g": "Gaerea"}, {"j": "Sam 20", "s": "Mainstage 2", "d": "17:45", "f": "18:30", "g": "Cavalera (Chaos A.D.)"}, {"j": "Sam 20", "s": "Valley", "d": "17:45", "f": "18:30", "g": "God Is An Astronaut"}, {"j": "Sam 20", "s": "Altar", "d": "17:45", "f": "18:30", "g": "Obscura"}, {"j": "Sam 20", "s": "Mainstage 1", "d": "18:35", "f": "19:25", "g": "Tom Morello"}, {"j": "Sam 20", "s": "Warzone", "d": "18:35", "f": "19:25", "g": "Cro-Mags"}, {"j": "Sam 20", "s": "Temple", "d": "18:35", "f": "19:25", "g": "Oranssi Pazuzu"}, {"j": "Sam 20", "s": "Mainstage 2", "d": "19:30", "f": "20:30", "g": "Anthrax"}, {"j": "Sam 20", "s": "Valley", "d": "19:30", "f": "20:30", "g": "The Young Gods"}, {"j": "Sam 20", "s": "Altar", "d": "19:30", "f": "20:30", "g": "Septicflesh"}, {"j": "Sam 20", "s": "Mainstage 1", "d": "20:35", "f": "21:45", "g": "A Perfect Circle"}, {"j": "Sam 20", "s": "Warzone", "d": "20:35", "f": "21:35", "g": "Kublai Khan TX"}, {"j": "Sam 20", "s": "Temple", "d": "20:35", "f": "21:35", "g": "Aura Noir"}, {"j": "Sam 20", "s": "Valley", "d": "21:40", "f": "22:40", "g": "Amenra"}, {"j": "Sam 20", "s": "Altar", "d": "21:40", "f": "22:40", "g": "Carcass"}, {"j": "Sam 20", "s": "Mainstage 2", "d": "21:50", "f": "23:05", "g": "Megadeth"}, {"j": "Sam 20", "s": "Warzone", "d": "22:45", "f": "23:45", "g": "Lionheart"}, {"j": "Sam 20", "s": "Temple", "d": "22:45", "f": "23:45", "g": "Old Man's Child"}, {"j": "Sam 20", "s": "Mainstage 1", "d": "23:10", "f": "00:40", "g": "Limp Bizkit"}, {"j": "Sam 20", "s": "Valley", "d": "23:50", "f": "00:50", "g": "Cult Of Luna"}, {"j": "Sam 20", "s": "Altar", "d": "23:50", "f": "00:50", "g": "Deicide"}, {"j": "Sam 20", "s": "Mainstage 2", "d": "00:45", "f": "02:00", "g": "Volbeat"}, {"j": "Sam 20", "s": "Warzone", "d": "00:55", "f": "02:00", "g": "Hatebreed"}, {"j": "Sam 20", "s": "Temple", "d": "00:55", "f": "02:00", "g": "Behemoth"}, {"j": "Dim 21", "s": "Mainstage 2", "d": "10:30", "f": "11:00", "g": "The Funeral Portrait"}, {"j": "Dim 21", "s": "Warzone", "d": "10:30", "f": "11:00", "g": "Karen Dió"}, {"j": "Dim 21", "s": "Altar", "d": "10:30", "f": "11:00", "g": "Tempt Fate"}, {"j": "Dim 21", "s": "Mainstage 1", "d": "11:05", "f": "11:35", "g": "Not Scientists"}, {"j": "Dim 21", "s": "Valley", "d": "11:05", "f": "11:35", "g": "Alta Rossa"}, {"j": "Dim 21", "s": "Temple", "d": "11:05", "f": "11:35", "g": "Silhouette"}, {"j": "Dim 21", "s": "Mainstage 2", "d": "11:40", "f": "12:10", "g": "Revnoir"}, {"j": "Dim 21", "s": "Warzone", "d": "11:40", "f": "12:10", "g": "Maid Of Ace"}, {"j": "Dim 21", "s": "Altar", "d": "11:40", "f": "12:10", "g": "Bloodstain"}, {"j": "Dim 21", "s": "Mainstage 1", "d": "12:15", "f": "12:45", "g": "The Dwarves"}, {"j": "Dim 21", "s": "Valley", "d": "12:15", "f": "12:45", "g": "Gnome"}, {"j": "Dim 21", "s": "Temple", "d": "12:15", "f": "12:45", "g": "Midnight Odyssey"}, {"j": "Dim 21", "s": "Mainstage 2", "d": "12:50", "f": "13:30", "g": "Resolve"}, {"j": "Dim 21", "s": "Warzone", "d": "12:50", "f": "13:30", "g": "End It"}, {"j": "Dim 21", "s": "Altar", "d": "12:50", "f": "13:30", "g": "Sublime Cadaveric Decomposition"}, {"j": "Dim 21", "s": "Mainstage 1", "d": "13:35", "f": "14:15", "g": "The Bones"}, {"j": "Dim 21", "s": "Valley", "d": "13:35", "f": "14:15", "g": "Black Tusk"}, {"j": "Dim 21", "s": "Temple", "d": "13:35", "f": "14:15", "g": "Thy Light"}, {"j": "Dim 21", "s": "Mainstage 2", "d": "14:20", "f": "15:05", "g": "President"}, {"j": "Dim 21", "s": "Warzone", "d": "14:20", "f": "15:05", "g": "Drain"}, {"j": "Dim 21", "s": "Altar", "d": "14:20", "f": "15:05", "g": "Fulci"}, {"j": "Dim 21", "s": "Mainstage 1", "d": "15:10", "f": "15:55", "g": "The Ataris"}, {"j": "Dim 21", "s": "Valley", "d": "15:10", "f": "15:55", "g": "Soilent Green"}, {"j": "Dim 21", "s": "Temple", "d": "15:10", "f": "15:55", "g": "Scour"}, {"j": "Dim 21", "s": "Mainstage 2", "d": "16:00", "f": "16:45", "g": "Black Veil Brides"}, {"j": "Dim 21", "s": "Warzone", "d": "16:00", "f": "16:45", "g": "Buzzcocks"}, {"j": "Dim 21", "s": "Altar", "d": "16:00", "f": "16:45", "g": "Six Feet Under"}, {"j": "Dim 21", "s": "Mainstage 1", "d": "16:50", "f": "17:40", "g": "Pennywise"}, {"j": "Dim 21", "s": "Valley", "d": "16:50", "f": "17:40", "g": "Eyehategod"}, {"j": "Dim 21", "s": "Temple", "d": "16:50", "f": "17:40", "g": "Gehenna"}, {"j": "Dim 21", "s": "Mainstage 2", "d": "17:45", "f": "18:35", "g": "Three Days Grace"}, {"j": "Dim 21", "s": "Warzone", "d": "17:45", "f": "18:35", "g": "Circle Jerks"}, {"j": "Dim 21", "s": "Altar", "d": "17:45", "f": "18:35", "g": "Forbidden"}, {"j": "Dim 21", "s": "Mainstage 1", "d": "18:40", "f": "19:40", "g": "Rise Against"}, {"j": "Dim 21", "s": "Valley", "d": "18:40", "f": "19:40", "g": "Corrosion Of Conformity"}, {"j": "Dim 21", "s": "Temple", "d": "18:40", "f": "19:40", "g": "Wolves In The Throne Room"}, {"j": "Dim 21", "s": "Mainstage 2", "d": "19:45", "f": "20:45", "g": "Architects"}, {"j": "Dim 21", "s": "Warzone", "d": "19:45", "f": "20:45", "g": "Agnostic Front"}, {"j": "Dim 21", "s": "Altar", "d": "19:45", "f": "20:45", "g": "Possessed"}, {"j": "Dim 21", "s": "Mainstage 1", "d": "20:50", "f": "21:50", "g": "The Hives"}, {"j": "Dim 21", "s": "Valley", "d": "20:50", "f": "21:50", "g": "Acid Bath"}, {"j": "Dim 21", "s": "Temple", "d": "20:50", "f": "21:50", "g": "Marduk"}, {"j": "Dim 21", "s": "Mainstage 2", "d": "21:55", "f": "23:10", "g": "Bad Omens"}, {"j": "Dim 21", "s": "Warzone", "d": "21:55", "f": "23:10", "g": "The Adicts"}, {"j": "Dim 21", "s": "Altar", "d": "21:55", "f": "23:10", "g": "Napalm Death"}, {"j": "Dim 21", "s": "Mainstage 1", "d": "23:15", "f": "00:30", "g": "The Offspring"}, {"j": "Dim 21", "s": "Valley", "d": "23:15", "f": "00:30", "g": "Down"}, {"j": "Dim 21", "s": "Temple", "d": "23:15", "f": "00:30", "g": "Mayhem"}];
+const STAGES=["Mainstage 1","Mainstage 2","Warzone","Valley","Temple","Altar"];
+const SHEX={"Mainstage 1":"#e23b2e","Mainstage 2":"#f0892a","Warzone":"#d8c13a","Valley":"#3fae6e","Temple":"#5b8def","Altar":"#a86bd1"};
+const DAYS=["Jeu 18","Ven 19","Sam 20","Dim 21"];
+const DLAB={"Jeu 18":"Jeudi 18","Ven 19":"Vendredi 19","Sam 20":"Samedi 20","Dim 21":"Dimanche 21"};
+const FDATE={"Jeu 18":18,"Ven 19":19,"Sam 20":20,"Dim 21":21};
+const fav=new Set(); let curDay="Jeu 18", mode="prog", search="";
+
+const toMin=t=>{const a=t.split(":");let h=+a[0],m=+a[1],v=h*60+m;return h<9?v+1440:v;};
+const keyOf=x=>x.j+"|"+x.s+"|"+x.d+"|"+x.g;
+const norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function dt(x,w){const a=x[w].split(":");let h=+a[0],m=+a[1];const d=new Date(2026,5,FDATE[x.j],h,m,0);if(h<9)d.setDate(d.getDate()+1);return d;}
+
+async function loadFavs(){
+  try{if(window.storage){const r=await window.storage.get("hf_favs");if(r&&r.value){JSON.parse(r.value).forEach(k=>fav.add(k));return;}}}catch(e){}
+  try{const v=localStorage.getItem("hf_favs");if(v)JSON.parse(v).forEach(k=>fav.add(k));}catch(e){}
+}
+async function saveFavs(){
+  try{if(window.storage){await window.storage.set("hf_favs",JSON.stringify([...fav]));return;}}catch(e){}
+  try{localStorage.setItem("hf_favs",JSON.stringify([...fav]));}catch(e){}
+}
+function toggle(k){fav.has(k)?fav.delete(k):fav.add(k);saveFavs();render();}
+
+function conflictsForDay(d){
+  const favs=DATA.filter(x=>x.j===d&&fav.has(keyOf(x)));
+  const map={};
+  for(let i=0;i<favs.length;i++)for(let j=i+1;j<favs.length;j++){
+    const a=favs[i],b=favs[j];
+    if(toMin(a.d)<toMin(b.f)&&toMin(b.d)<toMin(a.f)){
+      (map[keyOf(a)]=map[keyOf(a)]||[]).push(b);(map[keyOf(b)]=map[keyOf(b)]||[]).push(a);
+    }
+  }
+  return map;
+}
+function nowInfo(){
+  const now=new Date();
+  const favs=DATA.filter(x=>fav.has(keyOf(x))).map(x=>({x,s:dt(x,"d"),e:dt(x,"f")}));
+  const live=favs.filter(o=>now>=o.s&&now<o.e).sort((a,b)=>a.s-b.s);
+  const up=favs.filter(o=>o.s>now).sort((a,b)=>a.s-b.s);
+  return {now,live,next:up[0]};
+}
+
+function renderDays(){
+  const today=new Date(), isFest=today.getFullYear()===2026&&today.getMonth()===5;
+  const el=document.getElementById("days");el.innerHTML="";
+  DAYS.forEach(d=>{
+    const b=document.createElement("button");
+    const todayCls=(isFest&&today.getDate()===FDATE[d])?" today":"";
+    b.className="day"+(curDay===d?" on":"")+todayCls;
+    b.innerHTML=d.replace(" ","<br style='display:none'> ").split(" ")[0].toUpperCase()+" "+d.split(" ")[1];
+    b.onclick=()=>{curDay=d;renderDays();renderView();};
+    el.appendChild(b);
+  });
+}
+function renderSeg(){
+  document.querySelectorAll(".seg button").forEach(b=>{
+    b.classList.toggle("on",b.dataset.m===mode);
+    b.onclick=()=>{mode=b.dataset.m;renderSeg();renderView();window.scrollTo(0,0);};
+  });
+}
+
+function laneLayout(favs){
+  favs.forEach(f=>{f._s=toMin(f.d);f._e=toMin(f.f);});
+  favs.sort((a,b)=>a._s-b._s||a._e-b._e);
+  let cluster=[],curEnd=-1,clusters=[];
+  favs.forEach(f=>{if(cluster.length&&f._s>=curEnd){clusters.push(cluster);cluster=[];curEnd=-1;}cluster.push(f);curEnd=Math.max(curEnd,f._e);});
+  if(cluster.length)clusters.push(cluster);
+  clusters.forEach(cl=>{const ends=[];cl.forEach(f=>{let pl=false;for(let c=0;c<ends.length;c++){if(ends[c]<=f._s){f._c=c;ends[c]=f._e;pl=true;break;}}if(!pl){f._c=ends.length;ends.push(f._e);}});cl.forEach(f=>f._n=ends.length);});
+  return favs;
+}
+function progView(){
+  const d=curDay, cmap=conflictsForDay(d);
+  let favs=DATA.filter(x=>x.j===d&&fav.has(keyOf(x))).map(x=>Object.assign({},x));
+  let h="";
+  const ni=nowInfo();
+  if(ni.live.length){const o=ni.live[0];
+    h+=`<div class="live"><div class="row"><span class="tag">\u25b6 En ce moment</span></div><div class="band">${esc(o.x.g)}</div><div class="meta">${o.x.s} \u00b7 jusqu'\u00e0 ${o.x.f}</div>`;
+    if(ni.next){const n=ni.next;h+=`<div class="next"><span class="tag">\u23ed Ensuite</span><div class="band" style="font-size:15px">${esc(n.x.g)}</div><div class="meta">${n.x.d} \u00b7 ${n.x.s}</div></div>`;}
+    h+=`</div>`;
+  } else if(ni.next && (ni.next.s-ni.now)<6*3600*1000){const n=ni.next;
+    h+=`<div class="live"><span class="tag">\u23ed Prochain favori</span><div class="band">${esc(n.x.g)}</div><div class="meta">${n.x.d} \u00b7 ${n.x.s}</div></div>`;
+  }
+  if(!favs.length){
+    h+=`<div class="empty">Aucun groupe coch\u00e9 pour ${DLAB[d].toLowerCase()}.<br>Ajoute tes groupes pour voir ta timeline se construire.<br><button onclick="window.__go('all')">Choisir mes groupes</button></div>`;
+    return h;
+  }
+  laneLayout(favs);
+  const PXMIN=0.95, MINH=42;
+  const aStart=Math.floor(Math.min.apply(null,favs.map(f=>f._s))/60)*60;
+  const aEnd=Math.ceil(Math.max.apply(null,favs.map(f=>f._e))/60)*60;
+  const H=(aEnd-aStart)*PXMIN;
+  const ncf=Object.keys(cmap).length;
+  if(ncf)h+=`<div class="cflabel">\u26a0 ${ncf===1?'1 chevauchement':ncf+' chevauchements'} \u2014 cr\u00e9neaux c\u00f4te \u00e0 c\u00f4te, en rouge</div>`;
+  h+=`<div class="hint2">Touche un cr\u00e9neau pour le retirer de ta timeline.</div>`;
+  h+=`<div class="tl" style="height:${H}px">`;
+  for(let m=aStart;m<=aEnd;m+=60){const top=(m-aStart)*PXMIN;const hh=Math.floor((m%1440)/60);
+    h+=`<div class="gl" style="top:${top}px"></div><div class="hlbl" style="top:${top}px">${String(hh).padStart(2,"0")}h</div>`;}
+  h+=`<div class="track" style="height:${H}px">`;
+  favs.forEach(f=>{const top=(f._s-aStart)*PXMIN, ht=Math.max((f._e-f._s)*PXMIN,MINH);
+    const left=(f._c/f._n*100), wid=(100/f._n), cf=!!cmap[keyOf(f)], k=keyOf(f).replace(/'/g,"\\'");
+    h+=`<div class="block${cf?' cf':''}" style="top:${top}px;height:${ht}px;left:calc(${left}% + 2px);width:calc(${wid}% - 4px);background:linear-gradient(180deg,${SHEX[f.s]},${SHEX[f.s]}cc)" onclick="window.__rm('${k}')"><div class="bn">${esc(f.g)}</div><div class="bt">${f.d}\u2013${f.f} \u00b7 ${f.s}</div>${cf?'<span class="wb">\u26a0</span>':''}</div>`;});
+  const aDate=dt(favs[0],"d");aDate.setMinutes(0,0,0);
+  const nowPx=(new Date()-aDate)/60000*PXMIN;
+  if(nowPx>=0&&nowPx<=H)h+=`<div class="nowline" style="top:${nowPx}px"><span class="nl">maintenant</span></div>`;
+  h+=`</div></div>`;
+  h+=`<div class="foot"><span class="cnt">${favs.length} groupe(s) ce jour</span><button class="pdfbtn" onclick="window.__pdf()">Exporter en PDF</button></div>`;
+  return h;
+}
+
+function allView(){
+  const d=curDay;
+  let h=`<input class="search" id="search" type="search" placeholder="Rechercher un groupe…" value="${esc(search)}" autocomplete="off">
+    <div class="hint">Touche un groupe pour l'ajouter à ton programme.</div>`;
+  const sets=DATA.filter(x=>x.j===d&&(search===""||norm(x.g).includes(norm(search)))).sort((a,b)=>toMin(a.d)-toMin(b.d));
+  if(!sets.length){h+=`<div class="empty">Aucun groupe ne correspond.</div>`;return h;}
+  sets.forEach(x=>{const k=keyOf(x),sel=fav.has(k);
+    h+=`<div class="prow${sel?' sel':''}" onclick="window.__tg('${k.replace(/'/g,"\\'")}')">
+      <div class="chk">✓</div>
+      <div class="pb"><div class="pn">${esc(x.g)}</div>
+      <div class="pm"><i class="sdot" style="background:${SHEX[x.s]}"></i>${x.d}–${x.f} · ${x.s}</div></div>
+    </div>`;});
+  return h;
+}
+
+function renderView(){
+  const v=document.getElementById("view");
+  v.innerHTML=mode==="prog"?progView():allView();
+  if(mode==="all"){const s=document.getElementById("search");if(s){s.oninput=e=>{search=e.target.value;const p=s.selectionStart;renderView();const ns=document.getElementById("search");ns.focus();ns.setSelectionRange(p,p);};}}
+}
+function render(){renderDays();renderSeg();renderView();}
+
+function buildPrintout(){
+  const host=document.getElementById("printout");
+  let h=`<div class="p-title">HELLFEST 2026 — Mon planning</div><div class="p-sub">Clisson · 18–21 juin · ${fav.size} groupe(s)</div>`;let any=false;
+  DAYS.forEach(d=>{const cmap=conflictsForDay(d);const favs=DATA.filter(x=>x.j===d&&fav.has(keyOf(x))).sort((a,b)=>toMin(a.d)-toMin(b.d));
+    if(!favs.length)return;any=true;const np=Object.keys(cmap).length;
+    h+=`<div class="p-day">${DLAB[d]}</div>`;if(np)h+=`<div class="p-warn">⚠ chevauchement(s) — lignes marquées ⚠</div>`;
+    h+=`<table class="p-table"><thead><tr><th>Heure</th><th>Groupe</th><th>Scène</th><th></th></tr></thead><tbody>`;
+    favs.forEach(x=>{const isC=!!cmap[keyOf(x)];h+=`<tr class="${isC?'p-row-c':''}"><td class="p-time">${x.d}–${x.f}</td><td class="p-band">${esc(x.g)}</td><td>${x.s}</td><td class="p-c">${isC?'⚠':''}</td></tr>`;});
+    h+=`</tbody></table>`;});
+  if(!any)h+=`<div class="p-warn">Aucun groupe sélectionné.</div>`;host.innerHTML=h;
+}
+window.__tg=k=>toggle(k);
+window.__rm=k=>{fav.delete(k);saveFavs();renderView();};
+window.__go=m=>{mode=m;renderSeg();renderView();window.scrollTo(0,0);};
+window.__pdf=()=>{buildPrintout();window.print();};
+
+(async()=>{
+  await loadFavs();
+  const t=new Date();if(t.getFullYear()===2026&&t.getMonth()===5){const dd=DAYS.find(d=>FDATE[d]===t.getDate());if(dd)curDay=dd;}
+  render();
+  setInterval(()=>{if(mode==="prog")renderView();},30000);
+})();
+</script>
+</body></html>
